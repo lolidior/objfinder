@@ -7,6 +7,7 @@ cv2.imshow("test", test)
 def con(img):
     test_np = np.asarray(img)
     new_np = np.zeros((test_np.shape[0],test_np.shape[1]), dtype=float)
+    s_np = np.asarray(img)
     #shape (920, 1380, 3)
     x = 0
     ko = 0.08
@@ -21,14 +22,18 @@ def con(img):
     for i in range(new_np.shape[0]-1):
         for j in range(new_np.shape[1]-1):
             if abs(new_np[i][j] - new_np[i+1][j]) > ko or abs(new_np[i][j] - new_np[i+1][j+1]) > ko or abs(new_np[i][j] - new_np[i][j+1]) > ko:
-                test_np[i][j] = col
+                s_np[i][j] = col
+            else:
+                s_np[i][j] = [0,0,0]
             #if test_np[i+1][j][0] != 0 or test_np[i][j+1][0] != 0 or test_np[i+1][j+1][0] != 0:
                 #test_np[i][j] = img[i][j]
-    return test_np
+    return s_np
 
 
 
 out_np = con(test)
+
+cv2.fastNlMeansDenoisingColored(out_np, out_np, 30, 30, 10, 50)
 
 cv2.imshow("new", out_np)
 
